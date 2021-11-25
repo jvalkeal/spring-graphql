@@ -37,6 +37,7 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.graphql.GraphQlService;
@@ -120,6 +121,9 @@ public class GraphQlWebMvcAutoConfiguration {
 			Resource resource = resourceLoader.getResource("classpath:graphiql/index.html");
 			GraphiQlHandler graphiQLHandler = new GraphiQlHandler(graphQLPath, resource);
 			builder = builder.GET(properties.getGraphiql().getPath(), graphiQLHandler::handleRequest);
+			builder = builder.GET("/main.js", (request) -> {
+				return ServerResponse.ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource("graphiql/main.js"));
+			});
 		}
 
 		if (properties.getSchema().getPrinter().isEnabled()) {
