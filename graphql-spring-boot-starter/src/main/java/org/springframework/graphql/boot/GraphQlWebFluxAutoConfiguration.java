@@ -17,6 +17,8 @@
 package org.springframework.graphql.boot;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import graphql.GraphQL;
@@ -108,9 +110,16 @@ public class GraphQlWebFluxAutoConfiguration {
 						handler::handleRequest);
 
 		if (properties.getGraphiql().isEnabled()) {
-			Resource resource = resourceLoader.getResource("classpath:graphiql/index.html");
-			GraphiQlHandler graphiQlHandler = new GraphiQlHandler(graphQLPath, resource);
-			builder = builder.GET(properties.getGraphiql().getPath(), graphiQlHandler::handleRequest);
+			// Resource resource = resourceLoader.getResource("classpath:graphiql/index.html");
+			// GraphiQlHandler graphiQlHandler = new GraphiQlHandler(graphQLPath, resource);
+			// builder = builder.GET(properties.getGraphiql().getPath(), graphiQlHandler::handleRequest);
+			Resource htmlResource = resourceLoader.getResource("classpath:graphiql/index.html");
+			Resource jsResource = resourceLoader.getResource("classpath:graphiql/main.js");
+			Map<String, String> config = new HashMap<>();
+			config.put("LOGO", properties.getGraphiql().getLogo());
+			config.put("PATH", properties.getPath());
+			GraphiQlHandler graphiQLHandler = new GraphiQlHandler(htmlResource, jsResource, config);
+			builder = builder.GET(properties.getGraphiql().getPath() + "/**", graphiQLHandler::handleRequest);
 		}
 
 		if (properties.getSchema().getPrinter().isEnabled()) {
