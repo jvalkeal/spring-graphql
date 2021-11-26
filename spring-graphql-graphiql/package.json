@@ -6,7 +6,9 @@
   "description": "A GraphiQL example with webpack and typescript",
   "scripts": {
     "mavenbuild": "webpack-cli",
-    "start": "cross-env NODE_ENV=development webpack-dev-server"
+    "start": "cross-env NODE_ENV=development webpack-dev-server",
+    "format": "prettier --write **/*.ts --write **/*.jsx",
+    "format-check": "prettier --check **/*.ts --check **/*.jsx"
   },
   "dependencies": {
     "graphql": "16.0.1",
@@ -29,6 +31,7 @@
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.1",
     "html-webpack-plugin": "^4.2.0",
+    "prettier": "^1.19.1",
     "react-dom": "^16.12.0",
     "react-hot-loader": "^4.12.20",
     "style-loader": "^1.1.3",

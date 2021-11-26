@@ -1,8 +1,8 @@
 // define window extension to get through typechecking
 declare global {
   interface Window {
-    GRAPHIGL_LOGO: string
-    GRAPHIGL_PATH: string
+    GRAPHIGL_LOGO: string;
+    GRAPHIGL_PATH: string;
   }
 }
 
@@ -14,9 +14,4 @@ const PATH: string = window.GRAPHIGL_PATH || '';
 const PROTOCOL: string = location.protocol;
 const HOST: string = location.host;
 
-export {
-  LOGO,
-  PATH,
-  PROTOCOL,
-  HOST
-};
+export {LOGO, PATH, PROTOCOL, HOST};
