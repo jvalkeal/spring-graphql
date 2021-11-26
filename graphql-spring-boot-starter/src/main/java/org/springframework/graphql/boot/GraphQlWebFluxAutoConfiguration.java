@@ -110,9 +110,6 @@ public class GraphQlWebFluxAutoConfiguration {
 						handler::handleRequest);
 
 		if (properties.getGraphiql().isEnabled()) {
-			// Resource resource = resourceLoader.getResource("classpath:graphiql/index.html");
-			// GraphiQlHandler graphiQlHandler = new GraphiQlHandler(graphQLPath, resource);
-			// builder = builder.GET(properties.getGraphiql().getPath(), graphiQlHandler::handleRequest);
 			Resource htmlResource = resourceLoader.getResource("classpath:graphiql/index.html");
 			Resource jsResource = resourceLoader.getResource("classpath:graphiql/main.js");
 			Map<String, String> config = new HashMap<>();
