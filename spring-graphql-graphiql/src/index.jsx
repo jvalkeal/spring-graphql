@@ -1,35 +1,21 @@
 import React from 'react';
 import { render } from 'react-dom';
 import GraphiQL from 'graphiql';
+import { createGraphiQLFetcher } from '@graphiql/toolkit';
 import 'graphiql/graphiql.css';
 import 'regenerator-runtime/runtime'
-import { LOGO, PATH } from './config';
+import { LOGO, PATH, PROTOCOL, HOST } from './config';
 
 const Logo = () => <span>{LOGO}</span>;
+const url = `${PROTOCOL}//${HOST}${PATH}`;
+const subscriptionProtocol = PROTOCOL === 'https:' ? 'wss:' : 'ws:';
+const subscriptionUrl = `${subscriptionProtocol}//${HOST}${PATH}`;
+const fetcher = createGraphiQLFetcher({
+  url,
+  subscriptionUrl,
+});
 
 GraphiQL.Logo = Logo;
 
-const App = (props) => (
-  <GraphiQL
-    style={{ height: '100vh' }}
-    headerEditorEnabled
-    fetcher={async (graphQLParams, headers) => {
-      const data = await fetch(
-        props.path,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            ...headers,
-          },
-          body: JSON.stringify(graphQLParams),
-          credentials: 'same-origin',
-        },
-      );
-      return data.json().catch(() => data.text());
-    }}
-  />
-);
-
-render(<App path={PATH} />, document.getElementById('root'));
+export const App = () => <GraphiQL fetcher={fetcher} />;
+render(<App />, document.getElementById('root'));

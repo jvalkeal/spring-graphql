@@ -10,7 +10,13 @@ declare global {
 const LOGO: string = window.GRAPHIGL_LOGO || '';
 const PATH: string = window.GRAPHIGL_PATH || '';
 
+// for convenience also add some location info
+const PROTOCOL: string = location.protocol;
+const HOST: string = location.host;
+
 export {
   LOGO,
-  PATH
+  PATH,
+  PROTOCOL,
+  HOST
 };
