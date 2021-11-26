@@ -3,19 +3,19 @@ import { render } from 'react-dom';
 import GraphiQL from 'graphiql';
 import 'graphiql/graphiql.css';
 import 'regenerator-runtime/runtime'
-import { LOGO } from './config';
+import { LOGO, PATH } from './config';
 
 const Logo = () => <span>{LOGO}</span>;
 
 GraphiQL.Logo = Logo;
 
-const App = () => (
+const App = (props) => (
   <GraphiQL
     style={{ height: '100vh' }}
     headerEditorEnabled
     fetcher={async (graphQLParams, headers) => {
       const data = await fetch(
-        'http://localhost:8080/graphql',
+        props.path,
         {
           method: 'POST',
           headers: {
@@ -32,4 +32,4 @@ const App = () => (
   />
 );
 
-render(<App />, document.getElementById('root'));
+render(<App path={PATH} />, document.getElementById('root'));

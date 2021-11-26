@@ -17,6 +17,7 @@
 package org.springframework.graphql.boot;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,6 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.graphql.GraphQlService;
@@ -118,18 +118,15 @@ public class GraphQlWebMvcAutoConfiguration {
 						handler::handleRequest);
 
 		if (properties.getGraphiql().isEnabled()) {
+			// TODO: should we disable graphiql automatically if optional graphiql module
+			//       is not added to a classpath?
 			Resource htmlResource = resourceLoader.getResource("classpath:graphiql/index.html");
 			Resource jsResource = resourceLoader.getResource("classpath:graphiql/main.js");
-			GraphiQlHandler graphiQLHandler = new GraphiQlHandler(graphQLPath, htmlResource);
-			builder = builder.GET(properties.getGraphiql().getPath(), graphiQLHandler::handleRequest);
-			builder = builder.GET("/main.js", (request) -> {
-				return ServerResponse.ok().contentType(MediaType.TEXT_HTML).body(jsResource);
-			});
-			builder = builder.GET("/config.js", (request) -> {
-				StringBuilder sb = new StringBuilder();
-				sb.append(String.format("window.GRAPHIGL_LOGO=\"%s\";", properties.getGraphiql().getLogo()));
-				return ServerResponse.ok().contentType(MediaType.TEXT_PLAIN).body(sb.toString());
-			});
+			Map<String, String> config = new HashMap<>();
+			config.put("LOGO", properties.getGraphiql().getLogo());
+			config.put("PATH", properties.getPath());
+			GraphiQlHandler graphiQLHandler = new GraphiQlHandler(htmlResource, jsResource, config);
+			builder = builder.GET(properties.getGraphiql().getPath() + "/**", graphiQLHandler::handleRequest);
 		}
 
 		if (properties.getSchema().getPrinter().isEnabled()) {
