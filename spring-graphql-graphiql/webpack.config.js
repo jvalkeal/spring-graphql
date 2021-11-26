@@ -11,7 +11,7 @@ module.exports = {
         './src/index.jsx', // the entry point of our app
       ]
     : './src/index.jsx',
-  mode: 'development',
+  mode: 'production',
   devtool: 'inline-source-map',
   performance: {
     hints: false,
@@ -30,7 +30,7 @@ module.exports = {
         include: /node_modules/,
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(ts|js|jsx)$/,
         use: [
           {
             loader: 'babel-loader',
@@ -58,7 +58,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.json', '.jsx', '.css', '.mjs'],
+    extensions: ['.ts', '.js', '.json', '.jsx', '.css', '.mjs'],
   },
   plugins: [
     new HtmlWebpackPlugin({

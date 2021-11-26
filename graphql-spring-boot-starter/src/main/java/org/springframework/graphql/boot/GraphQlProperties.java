@@ -133,6 +133,11 @@ public class GraphQlProperties {
 		 */
 		private boolean enabled = true;
 
+		/**
+		 * GraphiQL logo string
+		 */
+		private String logo = "GraphiQL";
+
 		public String getPath() {
 			return this.path;
 		}
@@ -147,6 +152,14 @@ public class GraphQlProperties {
 
 		public void setEnabled(boolean enabled) {
 			this.enabled = enabled;
+		}
+
+		public String getLogo() {
+			return logo;
+		}
+
+		public void setLogo(String logo) {
+			this.logo = logo;
 		}
 	}
 

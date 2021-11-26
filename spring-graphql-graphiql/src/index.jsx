@@ -3,8 +3,9 @@ import { render } from 'react-dom';
 import GraphiQL from 'graphiql';
 import 'graphiql/graphiql.css';
 import 'regenerator-runtime/runtime'
+import { LOGO } from './config';
 
-const Logo = () => <span>{'My Corp'}</span>;
+const Logo = () => <span>{LOGO}</span>;
 
 GraphiQL.Logo = Logo;
 

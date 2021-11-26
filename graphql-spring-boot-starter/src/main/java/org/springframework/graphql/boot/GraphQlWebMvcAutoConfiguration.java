@@ -118,11 +118,17 @@ public class GraphQlWebMvcAutoConfiguration {
 						handler::handleRequest);
 
 		if (properties.getGraphiql().isEnabled()) {
-			Resource resource = resourceLoader.getResource("classpath:graphiql/index.html");
-			GraphiQlHandler graphiQLHandler = new GraphiQlHandler(graphQLPath, resource);
+			Resource htmlResource = resourceLoader.getResource("classpath:graphiql/index.html");
+			Resource jsResource = resourceLoader.getResource("classpath:graphiql/main.js");
+			GraphiQlHandler graphiQLHandler = new GraphiQlHandler(graphQLPath, htmlResource);
 			builder = builder.GET(properties.getGraphiql().getPath(), graphiQLHandler::handleRequest);
 			builder = builder.GET("/main.js", (request) -> {
-				return ServerResponse.ok().contentType(MediaType.TEXT_HTML).body(new ClassPathResource("graphiql/main.js"));
+				return ServerResponse.ok().contentType(MediaType.TEXT_HTML).body(jsResource);
+			});
+			builder = builder.GET("/config.js", (request) -> {
+				StringBuilder sb = new StringBuilder();
+				sb.append(String.format("window.GRAPHIGL_LOGO=\"%s\";", properties.getGraphiql().getLogo()));
+				return ServerResponse.ok().contentType(MediaType.TEXT_PLAIN).body(sb.toString());
 			});
 		}
 
